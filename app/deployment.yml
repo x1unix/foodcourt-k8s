@@ -4,7 +4,7 @@ metadata:
   name: foodcourt
   namespace: fc
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels: {app: foodcourt}
   template:
@@ -19,13 +19,15 @@ spec:
               value: '8080'
             - name: APP_KEY
               valueFrom:
-                secretKeyRef: { name: app-secret, key: APP_KEY }
+                secretKeyRef: { name: fc-secret, key: APP_KEY }
             - name: REDIS_HOST
               value: redis.fc.svc.cluster.local
             - name: REDIS_PORT
               value: '6379'
             - name: DB_HOST
               value: db.fc.svc.cluster.local
+            - name: DB_PORT
+              value: '3366'
             - name: DB_TEST_CONNECTION
               value: 'true'
             - name: DB_USER
