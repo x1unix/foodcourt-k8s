@@ -27,7 +27,7 @@ spec:
             - name: DB_HOST
               value: db.fc.svc.cluster.local
             - name: DB_PORT
-              value: '3366'
+              value: '3306'
             - name: DB_TEST_CONNECTION
               value: 'true'
             - name: DB_USER
