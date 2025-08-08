@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foodcourt
+  namespace: fc
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: foodcourt}
+  template:
+    metadata:
+      labels: {app: foodcourt}
+    spec:
+      containers:
+        - name: foodcourt
+          image: x1unix/foodcourt:latest
+          env:
+            - name: HTTP_PORT
+              value: '8080'
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef: { name: app-secret, key: APP_KEY }
+            - name: REDIS_HOST
+              value: redis.fc.svc.cluster.local
+            - name: REDIS_PORT
+              value: '6379'
+            - name: DB_HOST
+              value: db.fc.svc.cluster.local
+            - name: DB_TEST_CONNECTION
+              value: 'true'
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef: { name: db-secret, key: MYSQL_USER }
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef: { name: db-secret, key: MYSQL_PASSWORD }
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef: { name: db-secret, key: MYSQL_DATABASE }
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: photos
+              mountPath: /opt/foodcourt/public/photos
+          readinessProbe:
+            httpGet:
+              path: '/api'
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: photos
+          persistentVolumeClaim:
+            claimName: fc-photos
+

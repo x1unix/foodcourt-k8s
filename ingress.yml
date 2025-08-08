@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: foodcourt
+  namespace: fc
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: foodcourt
+spec:
+  rules:
+    - host: fc.k8s.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: foodcourt
+                port: { number: 80 }
+
