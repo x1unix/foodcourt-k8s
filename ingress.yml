@@ -4,7 +4,7 @@ metadata:
   name: foodcourt
   namespace: fc
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: foodcourt
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
     - host: fc.k8s.lan
